@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Stock Info</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #007bff;
+        }
+        .stock-info {
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Apple (AAPL) Stock Information</h1>
+    <button id="fetchStock">Get Stock Info</button>
+    <div class="stock-info" id="stockInfo"></div>
+
+    <script>
+        document.getElementById('fetchStock').addEventListener('click', () => {
+            fetch('http://127.0.0.1:5000/api/stock')
+                .then(response => response.json())
+                .then(data => {
+                    const stockInfoDiv = document.getElementById('stockInfo');
+                    stockInfoDiv.innerHTML = `
+                        <p>Symbol: ${data.symbol}</p>
+                        <p>Current Price: $${data.currentPrice}</p>
+                        <p>Day High: $${data.dayHigh}</p>
+                        <p>Day Low: $${data.dayLow}</p>
+                        <p>Market Cap: $${data.marketCap.toLocaleString()}</p>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error fetching stock data:', error);
+                });
+        });
+    </script>
+</body>
+</html>

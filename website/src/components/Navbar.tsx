@@ -13,11 +13,15 @@ const NavigationBar: React.FC = () => {
         <Link to="/about">About</Link>
       </NavLinks>
       <Actions>
-        <button>Get Started</button>
+        <Link to="/get-started">
+          <StyledButton>Get Started</StyledButton>
+        </Link>
       </Actions>
     </Nav>
   );
 };
+
+// Styled components for navigation bar
 const Nav = styled.nav`
   position: fixed;
   top: 0;
@@ -49,16 +53,20 @@ const NavLinks = styled.div`
 `;
 
 const Actions = styled.div`
-  button {
-    background-color: #fff;
-    color: #000;
-    padding: 0.5rem 1rem;
-    border: none;
-    margin-left: 1rem;
-    cursor: pointer;
-    border-radius: 8px;
-    margin-right: 2rem;
-  }
+  display: flex; /* Ensure items are displayed inline */
+  align-items: center; /* Center the button vertically */
 `;
 
+const StyledButton = styled.button`
+  background-color: #fff;
+  color: #000;
+  padding: 0.5rem 1rem;
+  border: none;
+  margin-left: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-right: 2rem;
+`;
+
+// Export the NavigationBar component
 export default NavigationBar;

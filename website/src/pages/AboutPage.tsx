@@ -44,8 +44,6 @@ const About = () => {
     </Container>
   );
 };
-
-export default About;
 // Container for the About page
 const Container = styled.div`
   padding: 20px;
@@ -120,3 +118,5 @@ const TeamCard = styled.div`
     color: #777;
   }
 `;
+
+export default About;

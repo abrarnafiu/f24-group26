@@ -3,29 +3,25 @@ import styled from "styled-components";
 import NavigationBar from '../components/Navbar';
 
 const GetStartedPage: React.FC = () => {
-  const [inputValue, setInputValue] = useState<string>(''); // State to store user input
+  const [ticker, setTicker] = useState<string>(''); 
+  const [period, setPeriod] = useState<string>(''); 
+  const [stockData, setStockData] = useState<any>(null); 
 
-  // Function to handle changes in the input box
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value); // Update the state with the new input value
-  };
-
-  // Function to handle form submission
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Prevent default form submission behavior
+    event.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/api/submit', {
+      const response = await fetch('http://localhost:5000/api/get_data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userInput: inputValue }), // Send input as JSON
+        body: JSON.stringify({ ticker, period }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Response from server:', data); // Handle server response
+        setStockData(data.data);  // Update state with stock data
       } else {
         console.error('Error submitting data:', response.statusText);
       }
@@ -38,19 +34,40 @@ const GetStartedPage: React.FC = () => {
     <Container>
       <NavigationBar />
       <Content>
-        <h2>Get Started</h2>
-        <StyledLabel htmlFor="userInput">Enter your details:</StyledLabel>
-        <form onSubmit={handleSubmit}> {/* Use a form element here */}
+        <h2>Get Stock Data</h2>
+        <form onSubmit={handleSubmit}>
+          <StyledLabel>Ticker Symbol:</StyledLabel>
           <StyledInput
             type="text"
-            id="userInput"
-            value={inputValue}
-            onChange={handleInputChange}
-            placeholder="Type something here..."
+            value={ticker}
+            onChange={(e) => setTicker(e.target.value)}
+            placeholder="e.g., AAPL"
           />
-          <StyledButton type="submit">Submit</StyledButton> {/* Change button type to submit */}
+          <StyledLabel>Period:</StyledLabel>
+          <StyledInput
+            type="text"
+            value={period}
+            onChange={(e) => setPeriod(e.target.value)}
+            placeholder="e.g., 1y, 1mo"
+          />
+          <StyledButton type="submit">Submit</StyledButton>
         </form>
-        <p>You entered: {inputValue}</p> {/* Display the input value */}
+        {stockData && (
+          <div>
+            <h3>Stock Data for {ticker} ({period}):</h3>
+            <ul>
+              {stockData.map((entry: any, index: number) => (
+                <li key={index}>
+                   <strong>Date:</strong> {entry.Date} | 
+                  <strong> Open:</strong> {entry.Open} | 
+                  <strong> Close:</strong> {entry.Close} |
+                  <strong> High:</strong> {entry.High} | 
+                  <strong> Low:</strong> {entry.Low}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </Content>
     </Container>
   );
@@ -58,7 +75,7 @@ const GetStartedPage: React.FC = () => {
 
 export default GetStartedPage;
 
-// Styled components
+// Styled components for layout
 const Container = styled.div`
   padding: 20px;
   background-color: #f0f0f0;

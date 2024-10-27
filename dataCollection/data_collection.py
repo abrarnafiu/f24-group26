@@ -1,4 +1,9 @@
 import yfinance as yf
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
 
 def is_valid_period(input_period):
     '''Take input_ticker and if it is valid, return #true, else return #false.'''
@@ -14,17 +19,16 @@ def is_valid_ticker(input_ticker):
     else:  
         return True
 
-def print_data (input_ticker, input_period):
-    '''Take input_ticker and input_period and if they are valid, return the data, else return a message.'''
-    if is_valid_ticker(input_ticker):
-        if is_valid_period(input_period):
-            ticker = yf.Ticker(input_ticker)
-            history = ticker.history(period='1y')
-            print(history)
-        else:
-            print("Not valid period")
-    else:
-        print("Not valid ticker")
+@app.route('/api/get_data')
+def get_data():
+    return {
+        'Name':"geek", 
+        "Age":"22",
+        "Date":10,  
+        "programming":"python"
+        }
 
-print_data("AAPL", "1y")
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
